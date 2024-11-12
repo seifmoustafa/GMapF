@@ -13,7 +13,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   @override
   void initState() {
     initialCameraPositin = const CameraPosition(
-      zoom: 14,
+      zoom: 17,
       target: LatLng(29.97373651037227, 31.234217425881088),
     );
     super.initState();
