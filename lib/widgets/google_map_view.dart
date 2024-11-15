@@ -25,7 +25,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
+     return GoogleMap(
       markers: markers,
       onMapCreated: (controller) {
         googleMapController = controller;
