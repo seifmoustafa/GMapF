@@ -15,7 +15,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   late LocationService locationService;
   Set<Marker> markers = {};
   @override
-  void initState() {
+  void initState() {  
     initialCameraPositin = const CameraPosition(
       target: LatLng(0, 0),
     );
@@ -25,7 +25,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   @override
   Widget build(BuildContext context) {
-     return GoogleMap(
+    return GoogleMap(
       markers: markers,
       onMapCreated: (controller) {
         googleMapController = controller;
@@ -41,8 +41,8 @@ class _GoogleMapViewState extends State<GoogleMapView> {
       var locationData = await locationService.getLocation();
       LatLng currentPosition =
           LatLng(locationData.latitude!, locationData.longitude!);
-      Marker currentLocationMarker =
-          Marker(markerId: MarkerId('myLocation'), position: currentPosition);
+      Marker currentLocationMarker = Marker(
+          markerId: const MarkerId('myLocation'), position: currentPosition);
       CameraPosition myCurrentCameraPosition = CameraPosition(
           zoom: 15,
           target: LatLng(locationData.latitude!, locationData.longitude!));
