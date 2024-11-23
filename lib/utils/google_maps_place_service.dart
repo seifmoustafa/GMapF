@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:gmapf/models/place_autocomplete_model/place_autocomplete_model.dart';
 
-class GoogleMapsPlaces {
+class GoogleMapsPlacesService {
   final String baseUrl = 'https://maps.googleapis.com/maps/api/place';
   final String apiKey = 'AIzaSyAHRtKMcRoMsCQ4quZtxoIfoph4F9vOimk';
   Future<List<PlaceAutocompleteModel>> getPredictions(
