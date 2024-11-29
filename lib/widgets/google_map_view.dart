@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gmapf/utils/location_service.dart';
+import 'package:gmapf/widgets/custom_list_view.dart';
 import 'package:gmapf/widgets/custom_textfield.dart';
 import 'package:gmapf/utils/google_maps_place_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:gmapf/models/place_autocomplete_model/place_autocomplete_model.dart';
 
 class GoogleMapView extends StatefulWidget {
   const GoogleMapView({super.key});
@@ -13,30 +15,41 @@ class GoogleMapView extends StatefulWidget {
 
 class _GoogleMapViewState extends State<GoogleMapView> {
   late CameraPosition initialCameraPositin;
-  late GoogleMapsPlacesService googleMapsPlaces;
+  late GoogleMapsPlacesService googleMapsPlacesService;
   late GoogleMapController googleMapController;
   late LocationService locationService;
   late TextEditingController textEditingController;
   Set<Marker> markers = {};
+
+  List<PlaceAutocompleteModel> places = [];
   @override
   void initState() {
+    googleMapsPlacesService = GoogleMapsPlacesService();
     textEditingController = TextEditingController();
 
     initialCameraPositin = const CameraPosition(
       target: LatLng(0, 0),
     );
     locationService = LocationService();
+
     fetchPredictions();
     super.initState();
   }
 
   void fetchPredictions() {
-    if (textEditingController.text.isNotEmpty) {
-      textEditingController.addListener(() async {
-        var result = await googleMapsPlaces.getPredictions(
+    textEditingController.addListener(() async {
+      if (textEditingController.text.isNotEmpty) {
+        var result = await googleMapsPlacesService.getPredictions(
             input: textEditingController.text);
-      });
-    }
+
+        places.clear();
+        places.addAll(result);
+        setState(() {});
+      } else {
+        places.clear();
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -58,8 +71,21 @@ class _GoogleMapViewState extends State<GoogleMapView> {
           initialCameraPosition: initialCameraPositin,
           zoomControlsEnabled: false,
         ),
-        CustomTextField(
-          textEditingController: textEditingController,
+        Column(
+          children: [
+            Positioned(
+              top: 16,
+              left: 16,
+              right: 16,
+              child: CustomTextField(
+                textEditingController: textEditingController,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            CustomListView(places: places),
+          ],
         )
       ],
     );
