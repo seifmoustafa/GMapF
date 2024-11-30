@@ -1,6 +1,6 @@
-import 'address_component.dart';
-import 'geometry.dart';
 import 'photo.dart';
+import 'geometry.dart';
+import 'address_component.dart';
 
 class PlaceDetailsModel {
   List<AddressComponent>? addressComponents;
@@ -14,7 +14,7 @@ class PlaceDetailsModel {
   List<Photo>? photos;
   String? placeId;
   String? reference;
-  List<String>? types;
+  List<dynamic>? types;
   String? url;
   int? utcOffset;
 
@@ -54,7 +54,7 @@ class PlaceDetailsModel {
           .toList(),
       placeId: json['place_id'] as String?,
       reference: json['reference'] as String?,
-      types: json['types'] as List<String>?,
+      types: json['types'] as List<dynamic>?,
       url: json['url'] as String?,
       utcOffset: json['utc_offset'] as int?,
     );
