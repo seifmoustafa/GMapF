@@ -4,6 +4,7 @@ import 'package:gmapf/widgets/custom_list_view.dart';
 import 'package:gmapf/widgets/custom_textfield.dart';
 import 'package:gmapf/utils/google_maps_place_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:gmapf/models/place_details_model/place_details_model.dart';
 import 'package:gmapf/models/place_autocomplete_model/place_autocomplete_model.dart';
 
 class GoogleMapView extends StatefulWidget {
@@ -85,6 +86,11 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               height: 8,
             ),
             CustomListView(
+              onPlaceSelect: (placeDetailsModel) {
+                textEditingController.clear();
+                places.clear();
+                setState(() {});
+              },
               places: places,
               placesService: googleMapsPlacesService,
             ),
