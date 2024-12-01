@@ -1,10 +1,10 @@
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:gmapf/utils/location_service.dart';
 import 'package:gmapf/widgets/custom_list_view.dart';
 import 'package:gmapf/widgets/custom_textfield.dart';
 import 'package:gmapf/utils/google_maps_place_service.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:gmapf/models/place_details_model/place_details_model.dart';
 import 'package:gmapf/models/place_autocomplete_model/place_autocomplete_model.dart';
 
 class GoogleMapView extends StatefulWidget {
@@ -21,10 +21,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   late LocationService locationService;
   late TextEditingController textEditingController;
   Set<Marker> markers = {};
-
+  late Uuid uuid;
+  String? sessionToken;
   List<PlaceAutocompleteModel> places = [];
   @override
   void initState() {
+    uuid = const Uuid();
     googleMapsPlacesService = GoogleMapsPlacesService();
     textEditingController = TextEditingController();
 
@@ -40,8 +42,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   void fetchPredictions() {
     textEditingController.addListener(() async {
       if (textEditingController.text.isNotEmpty) {
+        sessionToken ??= uuid.v4();
         var result = await googleMapsPlacesService.getPredictions(
-            input: textEditingController.text);
+            sessionToken: sessionToken!, input: textEditingController.text);
 
         places.clear();
         places.addAll(result);
@@ -89,6 +92,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
               onPlaceSelect: (placeDetailsModel) {
                 textEditingController.clear();
                 places.clear();
+                sessionToken = null;
                 setState(() {});
               },
               places: places,

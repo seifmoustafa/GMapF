@@ -21,9 +21,9 @@ class GoogleMapsPlacesService {
   /// Returns a [Future<List<PlaceAutocompleteModel>>] containing the list of place predictions.
   /// Throws an [Exception] if the request fails.
   Future<List<PlaceAutocompleteModel>> getPredictions(
-      {required String input}) async {
-    var response = await http
-        .get(Uri.parse('$baseUrl/autocomplete/json?key=$apiKey&input=$input'));
+      {required String input, required String sessionToken}) async {
+    var response = await http.get(Uri.parse(
+        '$baseUrl/autocomplete/json?key=$apiKey&input=$input&sessiontoken=$sessionToken'));
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['predictions'];
       List<PlaceAutocompleteModel> places = [];
