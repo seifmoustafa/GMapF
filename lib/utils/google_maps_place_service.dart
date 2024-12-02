@@ -4,7 +4,7 @@ import 'package:gmapf/models/place_details_model/place_details_model.dart';
 import 'package:gmapf/models/place_autocomplete_model/place_autocomplete_model.dart';
 
 /// A service class for interacting with the Google Maps Places API.
-class GoogleMapsPlacesService {
+class PlacesService {
   /// The base URL for the Google Maps Places API.
   final String baseUrl = 'https://maps.googleapis.com/maps/api/place';
 

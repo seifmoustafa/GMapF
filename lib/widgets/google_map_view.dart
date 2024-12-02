@@ -5,7 +5,6 @@ import 'package:gmapf/utils/routes_service.dart';
 import 'package:gmapf/utils/location_service.dart';
 import 'package:gmapf/widgets/custom_list_view.dart';
 import 'package:gmapf/widgets/custom_textfield.dart';
-import 'package:gmapf/models/routes_model/route.dart';
 import 'package:gmapf/models/location_info/lat_lng.dart';
 import 'package:gmapf/models/location_info/location.dart';
 import 'package:gmapf/utils/google_maps_place_service.dart';
@@ -24,7 +23,7 @@ class GoogleMapView extends StatefulWidget {
 
 class _GoogleMapViewState extends State<GoogleMapView> {
   late CameraPosition initialCameraPositin;
-  late GoogleMapsPlacesService googleMapsPlacesService;
+  late PlacesService googleMapsPlacesService;
   late GoogleMapController googleMapController;
   late LocationService locationService;
   late TextEditingController textEditingController;
@@ -39,7 +38,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   @override
   void initState() {
     uuid = const Uuid();
-    googleMapsPlacesService = GoogleMapsPlacesService();
+    googleMapsPlacesService = PlacesService();
     textEditingController = TextEditingController();
 
     initialCameraPositin = const CameraPosition(
