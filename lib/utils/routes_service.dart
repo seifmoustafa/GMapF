@@ -9,8 +9,8 @@ class RoutesService {
       'https://routes.googleapis.com/directions/v2:computeRoutes';
   final String apiKey = 'AIzaSyAHRtKMcRoMsCQ4quZtxoIfoph4F9vOimk';
   Future<RoutesModel> fetchRoute(
-      {required LocationInfo origin,
-      required LocationInfo destenation,
+      {required LocationInfoModel origin,
+      required LocationInfoModel destenation,
       RoutesModifier? routesModifier}) async {
     Uri url = Uri.parse(baseUrl);
     Map<String, String> headers = {
@@ -34,7 +34,7 @@ class RoutesService {
     var response = await http.post(
       url,
       headers: headers,
-      body: body,
+      body: jsonEncode(body),
     );
     if (response.statusCode == 200) {
       return RoutesModel.fromJson(jsonDecode(response.body));
