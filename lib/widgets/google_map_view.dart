@@ -22,10 +22,12 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   late LocationService locationService;
   late TextEditingController textEditingController;
   Set<Marker> markers = {};
-  late RoutesService
+  late RoutesService routesService;
   late Uuid uuid;
   String? sessionToken;
   List<PlaceAutocompleteModel> places = [];
+  late LatLng currentLocation;
+  late LatLng destination;
   @override
   void initState() {
     uuid = const Uuid();
@@ -36,7 +38,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
       target: LatLng(0, 0),
     );
     locationService = LocationService();
-
+    routesService = RoutesService();
     fetchPredictions();
     super.initState();
   }
@@ -96,6 +98,10 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                 places.clear();
                 sessionToken = null;
                 setState(() {});
+                destination = LatLng(
+                  placeDetailsModel.geometry!.location!.lat!,
+                  placeDetailsModel.geometry!.location!.lng!,
+                );
               },
               places: places,
               placesService: googleMapsPlacesService,
@@ -109,10 +115,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   void updateCurrentLocation() async {
     try {
       var locationData = await locationService.getLocation();
-      LatLng currentPosition =
-          LatLng(locationData.latitude!, locationData.longitude!);
+      currentLocation = LatLng(locationData.latitude!, locationData.longitude!);
       Marker currentLocationMarker = Marker(
-          markerId: const MarkerId('myLocation'), position: currentPosition);
+          markerId: const MarkerId('myLocation'), position: currentLocation);
       CameraPosition myCurrentCameraPosition = CameraPosition(
           zoom: 15,
           target: LatLng(locationData.latitude!, locationData.longitude!));
