@@ -52,8 +52,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
 
   void fetchPredictions() {
     textEditingController.addListener(() async {
+      sessionToken ??= uuid.v4();
+
       if (textEditingController.text.isNotEmpty) {
-        sessionToken ??= uuid.v4();
         var result = await placesService.getPredictions(
             sessionToken: sessionToken!, input: textEditingController.text);
 
