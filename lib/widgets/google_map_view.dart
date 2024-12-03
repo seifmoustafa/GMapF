@@ -23,7 +23,7 @@ class GoogleMapView extends StatefulWidget {
 
 class _GoogleMapViewState extends State<GoogleMapView> {
   late CameraPosition initialCameraPositin;
-  late PlacesService googleMapsPlacesService;
+  late PlacesService placesService;
   late GoogleMapController googleMapController;
   late LocationService locationService;
   late TextEditingController textEditingController;
@@ -38,7 +38,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   @override
   void initState() {
     uuid = const Uuid();
-    googleMapsPlacesService = PlacesService();
+    placesService = PlacesService();
     textEditingController = TextEditingController();
 
     initialCameraPositin = const CameraPosition(
@@ -54,7 +54,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     textEditingController.addListener(() async {
       if (textEditingController.text.isNotEmpty) {
         sessionToken ??= uuid.v4();
-        var result = await googleMapsPlacesService.getPredictions(
+        var result = await placesService.getPredictions(
             sessionToken: sessionToken!, input: textEditingController.text);
 
         places.clear();
@@ -114,7 +114,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                 displayRoutes(points);
               },
               places: places,
-              placesService: googleMapsPlacesService,
+              placesService: placesService,
             ),
           ],
         )
