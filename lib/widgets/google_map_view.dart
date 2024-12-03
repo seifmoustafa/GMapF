@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:gmapf/utils/map_services.dart';
@@ -23,9 +24,9 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   late Uuid uuid;
   String? sessionToken;
   List<PlaceAutocompleteModel> places = [];
-  late LatLng currentLocation;
   late LatLng destination;
   Set<Polyline> polyline = {};
+  Timer? debounce;
   @override
   void initState() {
     uuid = const Uuid();
@@ -40,14 +41,19 @@ class _GoogleMapViewState extends State<GoogleMapView> {
   }
 
   void fetchPredictions() {
-    textEditingController.addListener(() async {
-      sessionToken ??= uuid.v4();
+    textEditingController.addListener(() {
+      if (debounce?.isActive ?? false) {
+        debounce?.cancel();
+      }
+      debounce = Timer(const Duration(milliseconds: 100), () async {
+        sessionToken ??= uuid.v4();
 
-      await mapServices.getPredictions(
-          input: textEditingController.text,
-          sessionToken: sessionToken!,
-          places: places);
-      setState(() {});
+        await mapServices.getPredictions(
+            input: textEditingController.text,
+            sessionToken: sessionToken!,
+            places: places);
+        setState(() {});
+      });
     });
   }
 
@@ -95,7 +101,6 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                           placeDetailsModel.geometry!.location!.lng!,
                         );
                         var points = await mapServices.getRouteData(
-                            currentLocation: currentLocation,
                             destination: destination);
                         mapServices.displayRoutes(points,
                             polyline: polyline,
@@ -105,7 +110,7 @@ class _GoogleMapViewState extends State<GoogleMapView> {
                       places: places,
                       mapServices: mapServices,
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
             ],
           ),
         )
@@ -113,11 +118,14 @@ class _GoogleMapViewState extends State<GoogleMapView> {
     );
   }
 
-  void updateCurrentLocation() async {
+  void updateCurrentLocation() {
     try {
-      currentLocation = await mapServices.updateCurrentLocation(
-          googleMapController: googleMapController, markers: markers);
-      setState(() {});
+      mapServices.updateCurrentLocation(
+          onUpdateCurrentLocation: () {
+            setState(() {});
+          },
+          googleMapController: googleMapController,
+          markers: markers);
     } on LocationServiceException catch (e) {
     } on LocationPermissionException catch (e) {
     } catch (e) {}
