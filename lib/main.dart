@@ -11,9 +11,7 @@ class GMapF extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: SafeArea(child: GoogleMapView())),
+      home: Scaffold(resizeToAvoidBottomInset: false, body: GoogleMapView()),
     );
   }
 }
